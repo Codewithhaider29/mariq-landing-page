@@ -20,7 +20,7 @@ export default function Preloader() {
         }
         return prev + 1
       })
-    }, 25) // Adjust speed here (lower is faster)
+    }, 25)
 
     // 2. Word Cycle Logic
     const wordInterval = setInterval(() => {
@@ -32,7 +32,7 @@ export default function Preloader() {
       setIsLoading(false)
       clearInterval(wordInterval)
       clearInterval(counterInterval)
-    }, 3200) // Total duration (approx 25ms * 100 + buffer)
+    }, 3200)
 
     return () => {
       clearInterval(counterInterval)
@@ -45,8 +45,8 @@ export default function Preloader() {
     <AnimatePresence mode="wait">
       {isLoading && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050505] text-white overflow-hidden"
-          // Exit Animation: Slide Up curtain effect
+          // Change 1: h-[100dvh] handles mobile browser bars better
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050505] text-white overflow-hidden h-[100dvh] w-full"
           exit={{ y: "-100%" }}
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         >
@@ -56,34 +56,38 @@ export default function Preloader() {
              style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }} 
           />
 
-          <div className="relative z-10 flex flex-col items-center justify-center w-full px-10">
+          {/* Change 2: Responsive Padding (px-4 on mobile, px-10 on desktop) */}
+          <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-[1920px] px-4 sm:px-8 md:px-10 h-full">
             
             {/* Top: Current Word */}
-            <div className="h-10 overflow-hidden mb-4 flex items-center justify-center">
+            <div className="absolute top-10 sm:top-20 md:relative md:top-auto h-10 overflow-hidden mb-0 md:mb-8 flex items-center justify-center">
                <AnimatePresence mode="wait">
                  <motion.span
-                    key={index}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -20, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="text-[#CCFF00] font-mono text-sm uppercase tracking-[0.3em]"
+                   key={index}
+                   initial={{ y: 20, opacity: 0 }}
+                   animate={{ y: 0, opacity: 1 }}
+                   exit={{ y: -20, opacity: 0 }}
+                   transition={{ duration: 0.2 }}
+                   // Change 3: Text size adjustment
+                   className="text-[#CCFF00] font-mono text-xs sm:text-sm uppercase tracking-[0.2em] sm:tracking-[0.3em]"
                  >
-                    {words[index]}
+                   {words[index]}
                  </motion.span>
                </AnimatePresence>
             </div>
 
             {/* Middle: Massive Counter */}
-            <div className="relative">
-                <h1 className="text-[15vw] md:text-[12vw] font-black leading-none tracking-tighter font-oswald flex items-baseline">
+            <div className="relative flex items-center justify-center">
+                {/* Change 4: Responsive text sizing & tabular-nums to prevent jitter */}
+                <h1 className="text-[18vw] sm:text-[16vw] md:text-[12vw] lg:text-[10vw] xl:text-[180px] font-black leading-none tracking-tighter font-oswald flex items-baseline tabular-nums">
                    {count}
-                   <span className="text-2xl md:text-5xl ml-2 text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600">%</span>
+                   <span className="text-2xl sm:text-3xl md:text-5xl ml-1 md:ml-2 text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600">%</span>
                 </h1>
             </div>
 
             {/* Bottom: Progress Bar */}
-            <div className="absolute bottom-10 left-0 w-full px-10">
+            {/* Change 5: Adjusted bottom spacing for mobile screens */}
+            <div className="absolute bottom-6 sm:bottom-10 left-0 w-full px-4 sm:px-8 md:px-10">
                 <div className="w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
                     <motion.div 
                         className="h-full bg-[#CCFF00] shadow-[0_0_20px_#CCFF00]"
@@ -93,8 +97,9 @@ export default function Preloader() {
                     />
                 </div>
                 <div className="flex justify-between mt-2">
-                    <span className="text-xs text-gray-500 font-mono">Loading Assets...</span>
-                    <span className="text-xs text-gray-500 font-mono">Mariq Agency © 2025</span>
+                    {/* Change 6: Smaller font on very small screens */}
+                    <span className="text-[10px] sm:text-xs text-gray-500 font-mono">Loading Assets...</span>
+                    <span className="text-[10px] sm:text-xs text-gray-500 font-mono">Mariq Agency © 2025</span>
                 </div>
             </div>
 

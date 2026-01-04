@@ -43,7 +43,8 @@ export function ProjectsSection() {
   })
 
   return (
-    <section ref={container} className="bg-[#050505] text-white pt-32 pb-12 relative" id="work">
+    // Changed py-32 to py-20 for mobile
+    <section ref={container} className="bg-[#050505] text-white pt-20 md:pt-32 pb-12 relative" id="work">
       
       {/* Background Grid Texture */}
       <div className="absolute inset-0 z-0 opacity-[0.1] pointer-events-none" 
@@ -51,19 +52,19 @@ export function ProjectsSection() {
       />
 
       {/* --- Section Header --- */}
-      <div className="container mx-auto px-4 mb-24 relative z-10">
+      <div className="container mx-auto px-4 mb-16 md:mb-24 relative z-10">
         <div className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-3 mb-6"
+            className="flex items-center gap-3 mb-4 md:mb-6"
           >
-             <span className="w-12 h-px bg-[#CCFF00]" />
-             <span className="text-[#CCFF00] font-mono tracking-widest uppercase text-sm">
+             <span className="w-8 md:w-12 h-px bg-[#CCFF00]" />
+             <span className="text-[#CCFF00] font-mono tracking-widest uppercase text-xs md:text-sm">
                Selected Works
              </span>
-             <span className="w-12 h-px bg-[#CCFF00]" />
+             <span className="w-8 md:w-12 h-px bg-[#CCFF00]" />
           </motion.div>
 
           <motion.h2
@@ -71,7 +72,8 @@ export function ProjectsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="font-oswald text-5xl md:text-8xl font-black uppercase tracking-tighter mb-6"
+            // Responsive Text Size
+            className="font-oswald text-4xl sm:text-6xl md:text-8xl font-black uppercase tracking-tighter mb-4 md:mb-6"
           >
             Digital <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-500 to-white">Masterpieces</span>
           </motion.h2>
@@ -81,7 +83,7 @@ export function ProjectsSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-400 text-lg md:text-xl font-light"
+            className="text-gray-400 text-base md:text-xl font-light px-4"
           >
             We don't just build websites; we craft digital experiences that merge art, technology, and strategic thinking.
           </motion.p>
@@ -89,9 +91,9 @@ export function ProjectsSection() {
       </div>
 
       {/* --- Sticky Stacked Cards --- */}
-      <div className="container mx-auto px-4 pb-24 w-full">
+      <div className="container mx-auto px-4 pb-12 md:pb-24 w-full">
         {projects.map((project, i) => {
-          // Calculate scale: The items further down the list scale down less
+          // Calculate scale
           const targetScale = 1 - (projects.length - i) * 0.05
           
           return (
@@ -130,10 +132,10 @@ const Card = ({ i, title, label, description, image, tags, progress, range, targ
     offset: ["start end", "start start"],
   })
 
-  // Card Scaling Animation (The Stack Effect)
+  // Card Scaling Animation
   const scale = useTransform(progress, range, [1, targetScale])
   
-  // Parallax Image Animation (Image moves slower than container)
+  // Parallax Image Animation
   const imageScale = useTransform(scrollYProgress, [0, 1], [1.2, 1])
   const imageOpacity = useTransform(scrollYProgress, [0, 0.5], [0.8, 1])
 
@@ -142,36 +144,39 @@ const Card = ({ i, title, label, description, image, tags, progress, range, targ
       <motion.div
         style={{ 
           scale, 
-          top: `calc(-5vh + ${i * 35}px)` // Staggered top position for stack look
+          // Responsive Top calculation: Closer stacking on mobile (25px) vs desktop (35px)
+          top: `calc(-5vh + ${i * 25}px)` 
         }}
-        className="relative flex flex-col md:flex-row w-full max-w-[1200px] h-[65vh] min-h-[500px] rounded-[2rem] overflow-hidden border border-white/10 bg-[#121212] shadow-2xl origin-top group"
+        // Layout: flex-col on mobile (stack vertical), flex-row on desktop
+        // Height: h-[80vh] on mobile (taller for stack), h-[65vh] on desktop
+        className="relative flex flex-col md:flex-row w-full max-w-[1200px] h-[85vh] md:h-[65vh] min-h-[500px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden border border-white/10 bg-[#121212] shadow-2xl origin-top group"
       >
         
         {/* --- Left Content Side --- */}
-        <div className="w-full md:w-[45%] p-8 md:p-14 flex flex-col justify-between relative z-20">
+        <div className="w-full md:w-[45%] p-6 sm:p-10 md:p-14 flex flex-col justify-between relative z-20 h-[55%] md:h-full order-1">
           
           {/* Header */}
           <div>
-            <div className="flex items-center justify-between mb-8">
-               <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-[#CCFF00] rounded-full shadow-[0_0_10px_#CCFF00]" />
-                  <span className="text-[#CCFF00] font-mono text-xs uppercase tracking-widest">{label}</span>
+            <div className="flex items-center justify-between mb-4 md:mb-8">
+               <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-[#CCFF00] rounded-full shadow-[0_0_10px_#CCFF00]" />
+                  <span className="text-[#CCFF00] font-mono text-[10px] md:text-xs uppercase tracking-widest">{label}</span>
                </div>
-               <span className="text-gray-600 font-mono text-xl">0{i + 1}</span>
+               <span className="text-gray-600 font-mono text-base md:text-xl">0{i + 1}</span>
             </div>
             
-            <h3 className="font-oswald text-5xl md:text-6xl lg:text-7xl font-bold uppercase leading-[0.9] mb-6 text-white group-hover:text-[#CCFF00] transition-colors duration-500">
+            <h3 className="font-oswald text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase leading-[0.9] mb-3 md:mb-6 text-white group-hover:text-[#CCFF00] transition-colors duration-500">
               {title}
             </h3>
             
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed max-w-sm mb-8">
+            <p className="text-gray-400 text-xs sm:text-sm md:text-base leading-relaxed max-w-sm mb-4 md:mb-8 line-clamp-3 md:line-clamp-none">
               {description}
             </p>
 
             {/* Tags Row */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 hidden sm:flex">
               {tags.map((tag, idx) => (
-                <span key={idx} className="text-xs font-medium text-gray-400 border border-white/10 px-3 py-1 rounded-full">
+                <span key={idx} className="text-[10px] md:text-xs font-medium text-gray-400 border border-white/10 px-2 py-1 md:px-3 rounded-full">
                   {tag}
                 </span>
               ))}
@@ -179,19 +184,19 @@ const Card = ({ i, title, label, description, image, tags, progress, range, targ
           </div>
 
           {/* CTA Button */}
-          <div className="mt-8 pt-8 border-t border-white/10">
-            <button className="flex items-center gap-4 text-white hover:text-[#CCFF00] transition-all duration-300 group/btn">
-              <span className="text-lg font-bold uppercase tracking-wider">View Case Study</span>
-              <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center bg-transparent group-hover/btn:bg-[#CCFF00] group-hover/btn:border-[#CCFF00] group-hover/btn:text-black transition-all duration-300">
-                <ArrowUpRight className="w-5 h-5 group-hover/btn:rotate-45 transition-transform duration-300" />
+          <div className="mt-auto pt-4 md:pt-8 border-t border-white/10">
+            <button className="flex items-center gap-3 md:gap-4 text-white hover:text-[#CCFF00] transition-all duration-300 group/btn">
+              <span className="text-sm md:text-lg font-bold uppercase tracking-wider">View Case Study</span>
+              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white/20 flex items-center justify-center bg-transparent group-hover/btn:bg-[#CCFF00] group-hover/btn:border-[#CCFF00] group-hover/btn:text-black transition-all duration-300">
+                <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover/btn:rotate-45 transition-transform duration-300" />
               </div>
             </button>
           </div>
         </div>
 
         {/* --- Right Image Side (Parallax) --- */}
-        <div className="w-full md:w-[55%] h-full relative overflow-hidden bg-neutral-900 border-l border-white/5">
-          {/* Overlay to darken image slightly */}
+        <div className="w-full md:w-[55%] h-[45%] md:h-full relative overflow-hidden bg-neutral-900 border-b md:border-b-0 md:border-l border-white/5 order-2 md:order-2">
+          {/* Overlay */}
           <div className="absolute inset-0 bg-black/20 z-10 group-hover:bg-transparent transition-colors duration-500" />
           
           <motion.div 
@@ -203,7 +208,7 @@ const Card = ({ i, title, label, description, image, tags, progress, range, targ
                 alt={title}
                 fill
                 className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out"
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, 60vw"
              />
           </motion.div>
         </div>
